@@ -1,370 +1,342 @@
 # informatiojn-system
 1. Develop a web-based information system using basic technologies such as mark-up languages, stylesheets, JavaScript, PHP script, and databases
-import { useState } from 'react'
-import { BrowserRouter as Router, Link, Route, Routes } from 'react-router-dom'
-import { Home, User, Music, Calendar, House, Menu } from 'lucide-react'
-import { Card, CardContent, CardHeader, CardTitle } from "/components/ui/card"
-
-// Mock data for the house information (replaces PHP array)
-const houseInfo = [
-  { key: 'Type', value: 'Apartment' },
-  { key: 'Bedrooms', value: '2' },
-  { key: 'Bathrooms', value: '1' },
-  { key: 'Address', value: '123 Main Street, Cityville' },
-  { key: 'Floor', value: '3rd' },
-  { key: 'Square Footage', value: '850 sq ft' }
-]
-
-// Mock study subjects
-const subjects = [
-  'Web Development',
-  'Database Systems',
-  'Algorithms',
-  'Computer Networks',
-  'Software Engineering'
-]
-
-// Mock hobbies with images
-const hobbies = [
-  { name: 'Photography', image: '/hobby1.jpg' },
-  { name: 'Hiking', image: '/hobby2.jpg' },
-  { name: 'Reading', image: '/hobby3.jpg' },
-  { name: 'Cooking', image: '/hobby4.jpg' }
-]
-
-// Mock music tracks
-const musicTracks = [
-  { 
-    title: 'Bohemian Rhapsody', 
-    artist: 'Queen', 
-    artistLink: 'https://www.queenonline.com/',
-    audio: '/audio/bohemian.mp3',
-    video: '/video/bohemian.mp4'
-  },
-  { 
-    title: 'Imagine', 
-    artist: 'John Lennon', 
-    artistLink: 'https://www.johnlennon.com/',
-    audio: '/audio/imagine.mp3',
-    video: '/video/imagine.mp4'
-  },
-  { 
-    title: 'Thriller', 
-    artist: 'Michael Jackson', 
-    artistLink: 'https://www.michaeljackson.com/',
-    audio: '/audio/thriller.mp3',
-    video: '/video/thriller.mp4'
-  }
-]
-
-// Mock news feed
-const newsFeed = [
-  'New album released by favorite artist',
-  'Upcoming tech conference in the city',
-  'Local hiking trails reopened after maintenance',
-  'New cooking class starting next month'
-]
-
-// External links
-const externalLinks = [
-  { name: 'GitHub', url: 'https://github.com', icon: '/github-icon.jpg' },
-  { name: 'LinkedIn', url: 'https://linkedin.com', icon: '/linkedin-icon.jpg' },
-  { name: 'Stack Overflow', url: 'https://stackoverflow.com', icon: '/stackoverflow-icon.jpg' },
-  { name: 'Medium', url: 'https://medium.com', icon: '/medium-icon.jpg' }
-]
-
-function Header() {
-  return (
-    <header className="bg-blue-600 text-white p-4 flex items-center justify-between">
-      <div className="flex items-center space-x-4">
-        <div className="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16" />
-        <h1 className="text-2xl font-bold">My Personal Website</h1>
-      </div>
-      <nav className="hidden md:block">
-        <ul className="flex space-x-6">
-          <li><Link to="/" className="hover:underline flex items-center"><Home className="mr-1 h-4 w-4" /> Home</Link></li>
-          <li><Link to="/study" className="hover:underline flex items-center"><User className="mr-1 h-4 w-4" /> My Study</Link></li>
-          <li><Link to="/hobbies" className="hover:underline flex items-center"><User className="mr-1 h-4 w-4" /> My Hobbies</Link></li>
-          <li><Link to="/music" className="hover:underline flex items-center"><Music className="mr-1 h-4 w-4" /> My Music</Link></li>
-          <li><Link to="/house" className="hover:underline flex items-center"><House className="mr-1 h-4 w-4" /> My House</Link></li>
-        </ul>
-      </nav>
-      <button className="md:hidden">
-        <Menu className="h-6 w-6" />
-      </button>
-    </header>
-  )
-}
-
-function Sidebar() {
-  return (
-    <aside className="w-full md:w-64 bg-gray-100 p-4">
-      <h2 className="text-lg font-semibold mb-4">News Feed</h2>
-      <ul className="space-y-2">
-        {newsFeed.map((item, index) => (
-          <li key={index} className="p-2 hover:bg-gray-200 rounded">{item}</li>
-        ))}
-      </ul>
-      
-      <h2 className="text-lg font-semibold mt-6 mb-4">External Links</h2>
-      <ul className="space-y-2">
-        {externalLinks.map((link, index) => (
-          <li key={index} className="p-2 hover:bg-gray-200 rounded">
-            <a href={link.url} target="_blank" rel="noopener noreferrer" className="flex items-center">
-              {index >= 2 && <div className="bg-gray-200 border-2 border-dashed rounded-xl w-6 h-6 mr-2" />}
-              {link.name}
+<!-- Index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Website</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">
+                <img src="images/logo.png" alt="Logo">
             </a>
-          </li>
-        ))}
-      </ul>
-    </aside>
-  )
-}
-
-function HomePage() {
-  return (
-    <div className="p-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>About Me</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-col md:flex-row gap-6">
-            <div className="bg-gray-200 border-2 border-dashed rounded-xl w-full md:w-64 h-64" />
-            <div>
-              <p className="mb-4">
-                <strong>Hello!</strong> My name is Alex, and I'm a <em>passionate</em> web developer with 
-                <u>5 years of experience</u> in creating modern, responsive websites. I specialize in 
-                React, Node.js, and database design.
-              </p>
-              <hr className="my-4" />
-              <p className="mb-4">
-                My <strong>main achievements</strong> include developing a popular e-commerce platform 
-                that serves over 10,000 users daily and receiving the <em>"Best Developer"</em> award 
-                at my university. I'm constantly learning new technologies to stay at the <u>forefront</u> 
-                of web development.
-              </p>
-              <hr className="my-4" />
-              <p>
-                My <strong>goals</strong> for the next year include mastering <em>advanced React patterns</em>, 
-                contributing to open-source projects, and <u>launching</u> my own SaaS product. I believe 
-                in continuous learning and sharing knowledge with the community.
-              </p>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="my-study-subject.html">My Study Subject <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="my-hobbies.html">My Hobbies</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="my-music.html">My Music</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="my-house.php">My House</a>
+                    </li>
+                </ul>
             </div>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  )
-}
-
-function StudyPage() {
-  return (
-    <div className="p-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>My Study Subjects</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="mb-8">
-            <h3 className="text-xl font-semibold mb-4">Current Subjects:</h3>
-            <ol className="list-decimal pl-6 space-y-2">
-              {subjects.map((subject, index) => (
-                <li key={index}>{subject}</li>
-              ))}
-            </ol>
-          </div>
-          
-          <div>
-            <h3 className="text-xl font-semibold mb-4">Class Schedule:</h3>
-            <div className="bg-gray-200 border-2 border-dashed rounded-xl w-full h-64 mb-4" />
-            
-            <table className="min-w-full border">
-              <thead>
-                <tr className="bg-gray-100">
-                  <th className="border p-2">Time</th>
-                  <th className="border p-2">Monday</th>
-                  <th className="border p-2">Tuesday</th>
-                  <th className="border p-2">Wednesday</th>
-                  <th className="border p-2">Thursday</th>
-                  <th className="border p-2">Friday</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td className="border p-2">9:00-10:30</td>
-                  <td className="border p-2">Web Development</td>
-                  <td className="border p-2">Algorithms</td>
-                  <td className="border p-2">Web Development</td>
-                  <td className="border p-2">Database Systems</td>
-                  <td className="border p-2">Software Engineering</td>
-                </tr>
-                <tr>
-                  <td className="border p-2">11:00-12:30</td>
-                  <td className="border p-2">Computer Networks</td>
-                  <td className="border p-2">Web Development</td>
-                  <td className="border p-2">Algorithms</td>
-                  <td className="border p-2">Computer Networks</td>
-                  <td className="border p-2">Database Systems</td>
-                </tr>
-                <tr>
-                  <td className="border p-2">2:00-3:30</td>
-                  <td className="border p-2">Database Systems</td>
-                  <td className="border p-2">Software Engineering</td>
-                  <td className="border p-2">Computer Networks</td>
-                  <td className="border p-2">Algorithms</td>
-                  <td className="border p-2">Web Development</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  )
-}
-
-function HobbiesPage() {
-  return (
-    <div className="p-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>My Hobbies</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ul className="space-y-6">
-            {hobbies.map((hobby, index) => (
-              <li key={index} className="flex flex-col md:flex-row items-start gap-4">
-                <div className="bg-gray-200 border-2 border-dashed rounded-xl w-full md:w-48 h-48" />
-                <div className="flex-1">
-                  <h3 className="text-xl font-semibold">{hobby.name}</h3>
-                  <p className="mt-2">
-                    {hobby.name === 'Photography' && 'I enjoy capturing moments and landscapes with my DSLR camera.'}
-                    {hobby.name === 'Hiking' && 'Exploring nature trails and mountains is my way to relax and stay fit.'}
-                    {hobby.name === 'Reading' && 'I love reading science fiction and technical books in my free time.'}
-                    {hobby.name === 'Cooking' && 'Experimenting with new recipes and cuisines is my creative outlet.'}
-                  </p>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </CardContent>
-      </Card>
-    </div>
-  )
-}
-
-function MusicPage() {
-  return (
-    <div className="p-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>My Music</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-8">
-            {musicTracks.map((track, index) => (
-              <div key={index} className="border-b pb-6 last:border-b-0">
-                <h3 className="text-xl font-semibold">{track.title}</h3>
-                <p className="mb-4">
-                  Artist: <a href={track.artistLink} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">{track.artist}</a>
-                </p>
-                
-                <div className="flex flex-col md:flex-row gap-4">
-                  <div className="flex-1">
-                    <h4 className="font-medium mb-2">Audio:</h4>
-                    <div className="bg-gray-200 border-2 border-dashed rounded-xl w-full h-16" />
-                  </div>
-                  <div className="flex-1">
-                    <h4 className="font-medium mb-2">Video:</h4>
-                    <div className="bg-gray-200 border-2 border-dashed rounded-xl w-full h-48" />
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  )
-}
-
-function HousePage() {
-  return (
-    <div className="p-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>My House</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-col md:flex-row gap-6">
-            <div className="bg-gray-200 border-2 border-dashed rounded-xl w-full md:w-96 h-64" />
-            <div className="flex-1">
-              <table className="min-w-full border">
-                <tbody>
-                  {houseInfo.map((item, index) => (
-                    <tr key={index} className={index % 2 === 0 ? 'bg-gray-50' : ''}>
-                      <td className="border p-2 font-semibold">{item.key}</td>
-                      <td className="border p-2">{item.value}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  )
-}
-
-function Footer() {
-  return (
-    <footer className="bg-gray-800 text-white p-6">
-      <div className="container mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-center">
-          <div className="mb-4 md:mb-0">
-            <h3 className="text-lg font-semibold mb-2">Contact Information</h3>
-            <p>Email: <a href="mailto:example@domain.com" className="hover:underline">example@domain.com</a></p>
-            <p>Phone: (555) 123-4567</p>
-            <p>
-              Social: <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="hover:underline">Facebook Profile</a>
-            </p>
-          </div>
-          <div>
-            <p>Site created on: {new Date().toLocaleDateString()}</p>
-          </div>
-        </div>
-      </div>
+        </nav>
+    </header>
+    <main>
+        <section class="content">
+            <h1>Welcome to my personal website!</h1>
+            <p>I am <b>John Doe</b>, a <i>software developer</i> with a passion for <u>music</u> and <u>traveling</u>.</p>
+            <hr>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet nulla auctor, vestibulum magna sed, convallis ex.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet nulla auctor, vestibulum magna sed, convallis ex.</p>
+            <hr>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet nulla auctor, vestibulum magna sed, convallis ex.</p>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2023 John Doe</p>
+        <p>Email: <a href="mailto:johndoe@example.com">johndoe@example.com</a></p>
+        <p>Phone: 555-555-5555</p>
+        <p><a href="https://www.facebook.com/johndoe" target="_blank">Facebook</a></p>
     </footer>
-  )
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+<!-- my-study-subject.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Study Subject</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">
+                <img src="images/logo.png" alt="Logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">My Study Subject <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <section class="content">
+            <h1>My Study Subject</h1>
+            <ol>
+                <li>Subject 1</li>
+                <li>Subject 2</li>
+                <li>Subject 3</li>
+            </ol>
+            <p>Schedule: <a href="schedule.pdf" target="_blank"><img src="images/schedule.png" alt="Schedule"></a></p>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2023 John Doe</p>
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+<!-- my-hobbies.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Hobbies</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">
+                <img src="images/logo.png" alt="Logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">My Hobbies <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <section class="content">
+            <h1>My Hobbies</h1>
+            <ul>
+                <li>Hobby 1 <img src="images/hobby1.png" alt="Hobby 1"></li>
+                <li>Hobby 2 <img src="images/hobby2.png" alt="Hobby 2"></li>
+                <li>Hobby 3 <img src="images/hobby3.png" alt="Hobby 3"></li>
+            </ul>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2023 John Doe</p>
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+<!-- my-music.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Music</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">
+                <img src="images/logo.png" alt="Logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">My Music <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <section class="content">
+            <h1>My Music</h1>
+            <ol>
+                <li><a href="https://www.artist1.com" target="_blank">Artist 1</a> - Song 1</li>
+                <li><a href="https://www.artist2.com" target="_blank">Artist 2</a> - Song 2</li>
+                <li><a href="https://www.artist3.com" target="_blank">Artist 3</a> - Song 3</li>
+            </ol>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2023 John Doe</p>
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+<!-- my-house.php -->
+<?php
+$houseInfo = array(
+    "bedrooms" => 3,
+    "bathrooms" => 2,
+    "streetAddress" => "123 Main St"
+);
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My House</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">
+                <img src="images/logo.png" alt="Logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">My House <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <section class="content">
+            <h1>My House</h1>
+            <table>
+                <tr>
+                    <th>Feature</th>
+                    <th>Value</th>
+                </tr>
+                <?php foreach ($houseInfo as $feature => $value) { ?>
+                <tr>
+                    <td><?php echo $feature; ?></td>
+                    <td><?php echo $value; ?></td>
+                </tr>
+                <?php } ?>
+            </table>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2023 John Doe</p>
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+<!-- styles.css -->
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
 }
 
-function App() {
-  return (
-    <div className="min-h-screen flex flex-col">
-      <Header />
-      <div className="flex flex-1">
-        <Sidebar />
-        <main className="flex-1">
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/study" element={<StudyPage />} />
-            <Route path="/hobbies" element={<HobbiesPage />} />
-            <Route path="/music" element={<MusicPage />} />
-            <Route path="/house" element={<HousePage />} />
-          </Routes>
-        </main>
-      </div>
-      <Footer />
-    </div>
-  )
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
 }
 
-export default function PersonalWebsite() {
-  return (
-    <Router>
-      <App />
-    </Router>
-  )
+nav {
+    background-color: #333;
+    padding: 10px;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+section {
+    background-color: #f7f7f7;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+p {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #f0f0f0;
+}
+
+footer {
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+    clear: both;
 }
